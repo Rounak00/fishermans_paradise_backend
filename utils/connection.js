@@ -1,12 +1,13 @@
 const mongoose=require("mongoose");
+const logger = require("./logger");
 const DB_LINK=require("../config/secret").DB_LINK;
 
 const connection=async()=>{
     try{
         await mongoose.connect(DB_LINK);
-        console.log("DB Connected !!!");
+        logger.info("DB Connected !!!");
     }catch(err){
-        console.log(`Error in DB connection ${err}`);
+        logger.error(`Error in DB connection ${err}`);
     }
 }
 
