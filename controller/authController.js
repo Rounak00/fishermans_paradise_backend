@@ -14,29 +14,28 @@ const authController={
             email:req.body.email,
             address:req.body.address,
             password: CryptoJs.AES.encrypt(req.body.password,CRYPTO_SECRET).toString(),
-            role:"customer",
             contact: req.body.contact
          });
          try{
-             await newCustomer.save();
-             res.status(201).json({msg:"profile created, Please log in"});
+             const response = await newCustomer.save();
+             res.status(201).json(response);
          }catch(err){next(err);}
      },
-     async fishermanRegister(res,req,next){
+    //  async fishermanRegister(res,req,next){
 
-     },
-     async adminRegister(res,req,next){
+    //  },
+    //  async adminRegister(res,req,next){
 
-     },
-      async customerLogIn(res,req,next){
+    //  },
+    //   async customerLogIn(res,req,next){
 
-      },
-      async fishermanLogIn(res,req,next){
+    //   },
+    //   async fishermanLogIn(res,req,next){
 
-      },
-      async adminLogIn(res,req,next){
+    //   },
+    //   async adminLogIn(res,req,next){
 
-      }
+    //   }
 
 }
 
