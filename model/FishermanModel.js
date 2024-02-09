@@ -2,10 +2,10 @@ const mongoose=require("mongoose");
 
 
 const fishermanSchema=new mongoose.Schema({
-  contact:{type:Number,required:true},
-  role:{type:String,require:true},
-  email:{type:String,required:true},
-  approve:{type:Boolean,require:true},
+  contact:{type:Number,required:true,unique: true},
+  role:{type:String,require:true,default:"fisherman"},
+  email:{type:String,required:true,unique: true},
+  approve:{type:Boolean,require:true,default:false},
   license:{type:String,require:true},
   password:{type:String,require:true}
 },{timestamps: true})

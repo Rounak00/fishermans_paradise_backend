@@ -3,11 +3,12 @@ const connection =require("./utils/connection");
 const PORT=require("./config/secret").PORT;
 const healthRoutes=require("./routes/healthRoutes");
 const authRoutes=require("./routes/authRoutes");
-
 const errorHandler=require("./middleware/errorHandler");
 const logger = require("./utils/logger");
-
+const path=require("path");
 const app=express();
+
+global.appRoot = path.resolve(__dirname);
 
 app.use(express.json());
 app.use(errorHandler);
