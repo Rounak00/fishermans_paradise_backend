@@ -37,25 +37,30 @@ const fishermanController={
           }
     },
     async removeProduct(req,res,next){
+        
         try{
           const item=await productSchema.findByIdAndDelete(req.params.id);
-          res.status(200).json({msg:"Item delete successfully"});
+          const image=item.image;
+          fs.unlink(`${appRoot}/${image}`, (err) => {
+            console.log("deleted");
+         })
+          res.status(200).json(item);
         }catch(err){next(err);}
     },
     async updateProduct(req,res,next){
+             
         try{
-          const newItem={
+          const i=await productSchema.findByIdAndUpdate(req.params.id,{$set:{
+
             fishermanID: req.user.id,
             title: req.body.title,
             detail:req.body.detail,
             weight:req.body.weight,
             quantity:req.body.quantity,
             price:req.body.price,
-            category:req.body.category,    
-          };
-
-          const i=await productSchema.findByIdAndUpdate(req.params.id,{$set:{newItem}});
-
+            category:req.body.category, 
+          }});
+          res.status(200).json({msg: " Update successfully "})
         }catch(err){next(err);}
     },
 
