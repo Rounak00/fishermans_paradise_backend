@@ -5,6 +5,7 @@ const productSchema=new mongoose.Schema({
   fishermanID:{type:String,required:true},
   title:{type:String,},
   detail:{type:String,required:true},
+  image:{type:String,required:true},
   weight:{type:String,required:true},
   quantity:{type:String,required:true},
   price:{type:Number,required:true},
