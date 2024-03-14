@@ -5,7 +5,7 @@ const CryptoJs = require("crypto-js");
 const CRYPTO_SECRET = require("../config/secret").CRYPTO_SECRET;
 const JWT_SECRET = require("../config/secret").JWT_SECRET;
 const jwt = require("jsonwebtoken");
-const fs =require("fs");
+const fs = require("fs");
 // const path =require ("path");
 
 const authController = {
@@ -33,18 +33,19 @@ const authController = {
 
   async fishermanRegister(req, res, next) {
     if (!req.file) {
-      return res.status(401).json({msg:"Image is required"});
+      return res.status(401).json({ msg: "Image is required" });
     }
     const img = req.file.path;
+    console.log(img);
     const newCustomer = new fishermanSchema({
       name: req.body.name,
       email: req.body.email,
-      // password: CryptoJs.AES.encrypt(
-        password:req.body.password,
-      //   CRYPTO_SECRET
-      // ).toString(),
+      password: CryptoJs.AES.encrypt(
+        req.body.password,
+        CRYPTO_SECRET
+      ).toString(),
       contact: req.body.contact,
-      liscence: img,
+      license: img,
     });
 
     try {
@@ -56,11 +57,11 @@ const authController = {
     } catch (err) {
       fs.unlink(`${appRoot}/${img}`, (err) => {
         console.log("deleted");
-     })
-     next(err)
+      });
+      next(err);
     }
   },
-  
+
   async adminRegister(req, res, next) {
     const newCustomer = new adminSchema({
       name: req.body.name,
@@ -94,7 +95,8 @@ const authController = {
       );
       const originalPassword = hashPassword.toString(CryptoJs.enc.Utf8);
 
-      originalPassword !== password && res.statsus(401).json({msg:"Wrong password"});
+      originalPassword !== password &&
+        res.statsus(401).json({ msg: "Wrong password" });
 
       const generateToken = jwt.sign(
         {
@@ -102,55 +104,55 @@ const authController = {
           role: isExist.role,
         },
         JWT_SECRET
-      );    
+      );
       res.status(200).json({
         msg: "Login successfully",
         user: {
           accessToken: generateToken,
-          name:isExist.name,
-          role:"customer"
-        }
-        
+          name: isExist.name,
+          role: "customer",
+        },
       });
     } catch (err) {
       next(err);
     }
   },
-    async fishermanLogIn(req,res,next){
-      const { email, password } = req.body;
-      
+  async fishermanLogIn(req, res, next) {
+    const { email, password } = req.body;
+
     try {
       const isExist = await fishermanSchema.findOne({ email: email });
       if (!isExist) {
         return res.status(404).json("User not found");
       }
-      
+
       const hashPassword = CryptoJs.AES.decrypt(
         isExist.password,
         CRYPTO_SECRET
       );
       const originalPassword = hashPassword.toString(CryptoJs.enc.Utf8);
-      
-      originalPassword !== password && res.statsus(401).json({msg:"Wrong password"});
+
+      originalPassword !== password &&
+        res.statsus(401).json({ msg: "Wrong password" });
       const generateToken = jwt.sign(
         {
           id: isExist._id,
           role: isExist.role,
         },
         JWT_SECRET
-      );    
+      );
       res.status(200).json({
         msg: "Login successfully",
-        user:{ 
-        accessToken: generateToken,
-        role:"fisherman",
-        name:isExist.name
-        }
+        user: {
+          accessToken: generateToken,
+          role: "fisherman",
+          name: isExist.name,
+        },
       });
     } catch (err) {
       next(err);
     }
-    },
+  },
   async adminLogIn(req, res, next) {
     const { email, password } = req.body;
     try {
@@ -176,11 +178,11 @@ const authController = {
       );
       res.status(200).json({
         msg: "Login successfully",
-        user: { 
-        accessToken: generateToken,
-        role:"admin",
-        name:isExist.name
-        }
+        user: {
+          accessToken: generateToken,
+          role: "admin",
+          name: isExist.name,
+        },
       });
     } catch (err) {
       next(err);
