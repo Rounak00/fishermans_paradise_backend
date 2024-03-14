@@ -2,6 +2,7 @@ const mongoose=require("mongoose");
 
 
 const fishermanSchema=new mongoose.Schema({
+  name:{type:String,required:true},
   contact:{type:Number,required:true,unique: true},
   role:{type:String,require:true,default:"fisherman"},
   email:{type:String,required:true,unique: true},

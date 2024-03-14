@@ -18,8 +18,9 @@ const fishermanController={
                 title:req.body.title,
                 detail:req.body.detail,
                 weight:req.body.weight,
-                quantity:req.body.quantity,
+                totalQuantity:req.body.totalQuantity,
                 price:req.body.price,
+                unit:req.body.unit,
                 category:req.body.category,
                 image: img
             });
@@ -56,6 +57,7 @@ const fishermanController={
             title: req.body.title,
             detail:req.body.detail,
             weight:req.body.weight,
+            unit:req.body.unit,
             quantity:req.body.quantity,
             price:req.body.price,
             category:req.body.category, 

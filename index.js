@@ -1,5 +1,6 @@
 const express =require("express");
 const connection =require("./utils/connection");
+const cors=require("cors");
 const PORT=require("./config/secret").PORT;
 const healthRoutes=require("./routes/healthRoutes");
 const authRoutes=require("./routes/authRoutes");
@@ -13,6 +14,14 @@ const app=express();
 
 global.appRoot = path.resolve(__dirname);
 
+app.use(
+    cors({
+        origin: [
+            "http://localhost:5173",
+        ],
+        credentials: true,
+    }),
+);
 app.use(express.json());
 app.use(errorHandler);
 app.use("/api/health",healthRoutes);

@@ -39,11 +39,10 @@ const authController = {
     const newCustomer = new fishermanSchema({
       name: req.body.name,
       email: req.body.email,
-      address: req.body.address,
-      password: CryptoJs.AES.encrypt(
-        req.body.password,
-        CRYPTO_SECRET
-      ).toString(),
+      // password: CryptoJs.AES.encrypt(
+        password:req.body.password,
+      //   CRYPTO_SECRET
+      // ).toString(),
       contact: req.body.contact,
       liscence: img,
     });
@@ -106,7 +105,12 @@ const authController = {
       );    
       res.status(200).json({
         msg: "Login successfully",
-        accessToken: generateToken,
+        user: {
+          accessToken: generateToken,
+          name:isExist.name,
+          role:"customer"
+        }
+        
       });
     } catch (err) {
       next(err);
@@ -114,20 +118,20 @@ const authController = {
   },
     async fishermanLogIn(req,res,next){
       const { email, password } = req.body;
+      
     try {
       const isExist = await fishermanSchema.findOne({ email: email });
       if (!isExist) {
-        res.status(404).json("User not found");
+        return res.status(404).json("User not found");
       }
-
+      
       const hashPassword = CryptoJs.AES.decrypt(
         isExist.password,
         CRYPTO_SECRET
       );
       const originalPassword = hashPassword.toString(CryptoJs.enc.Utf8);
-
+      
       originalPassword !== password && res.statsus(401).json({msg:"Wrong password"});
-
       const generateToken = jwt.sign(
         {
           id: isExist._id,
@@ -137,7 +141,11 @@ const authController = {
       );    
       res.status(200).json({
         msg: "Login successfully",
+        user:{ 
         accessToken: generateToken,
+        role:"fisherman",
+        name:isExist.name
+        }
       });
     } catch (err) {
       next(err);
@@ -168,7 +176,11 @@ const authController = {
       );
       res.status(200).json({
         msg: "Login successfully",
+        user: { 
         accessToken: generateToken,
+        role:"admin",
+        name:isExist.name
+        }
       });
     } catch (err) {
       next(err);

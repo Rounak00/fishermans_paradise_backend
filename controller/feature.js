@@ -13,11 +13,41 @@ const feature={
      async searchProduct(req,res,next){
 
         try{
-            const keyword=(req.query.search).trim();
-            const result=await productSchema.findOne({title:keyword});
-            res.status(200).json(result);
+         const { limit}=req.query;
+         const { title}= req.body;
+         if (title) {
+             const query = {
+                 title: { $regex: title, $options: 'i' }
+             };  
+             try {
+                 const products = await productSchema.find(query);
+                 return res.status(200).json(products);
+             } catch (error) {
+                 return next(error);
+             }
+         } else {
+             const products = await products.find().sort({ createdAt: -1 });
+             return res.status(200).json(products);
+         }
         }catch(err){next(err);}
-     }
+     },
+     async riverProducts(req,res,next){
+        try{
+         const products=productSchema.find({Category: "sea"});
+         res.status(200).json(products);
+        }catch(err){next(err);}
+     },
+     async buy(req,res,next){
+        const item=await productSchema.findById(req.params.id);
+        const val=item.totalQuantity-1;
+        let prod;
+        if(!val){prod=await productSchema.findByIdAndDelete(req.params.id);}
+        else{ prod=await productSchema.findByIdAndUpdate(req.params.id,{$set:{totalQuantity:val}})};
+
+        res.status(200).json(prod);
+        
+     },
+     async cartBuy(req,res,next){}
 }
 module.exports=feature;
 

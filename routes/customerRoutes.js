@@ -15,4 +15,7 @@ routes.get("/showOrder",verifyCustomer,customerController.showOrder);
 routes.post("/addCart/:id",verifyCustomer,customerController.addCart);
 routes.get("/showCart",verifyCustomer,customerController.showCart);
 routes.delete("/removeCart/:id",verifyCustomer,customerController.removeCart)
+
+
+routes.put("/buy/:id",verifyCustomer,featureController.buy);
 module.exports=routes;

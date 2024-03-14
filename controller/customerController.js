@@ -25,13 +25,14 @@ const customerController={
         try{
           const userData=await customerSchema.findById(req.user.id);
           const productData=await productSchema.findById(req.params.id);
-           
+           const newPrice=req.query.quantity*productData.price;
           const Item=new orderSchema({
             customerID:req.user.id,
             productID:req.params.id,
             weight:productData.weight,
-            quantity:req.query.quantity,
-            price:productData.price,
+            orderedQuantity:req.query.quantity,
+            unit:productData.unit,
+            price:newPrice,
             contact:userData.contact,
             address:userData.address,
             status:req.query.stat
@@ -49,23 +50,53 @@ const customerController={
        },
        async addCart(req,res,next){
         const productData=await productSchema.findById(req.params.id);
+        const productInCart=await cartSchema.findOne({productID:req.params.id,
+                                                      customerID:req.user.id });
+
+        if(productInCart){ 
+         
+          try{ 
+            const totalOrderedItem=productInCart.cartQuantity+1;
+            if(productData.totalQuantity<totalOrderedItem){
+             res.status(400).json({msg:"Don't Have That much Item"});
+            }else{
+              await cartSchema.findByIdAndUpdate(productInCart._id,{$set:{
+               cartQuantity: totalOrderedItem
+              }});
+              res.status(200).json({msg:"added"});
+            }
+           }catch(err){next(err);}  
+      }else{
         try{
           const Item=new cartSchema({
             weight:productData.weight,
-            quantity:productData.quantity,
+            cartQuantity:1,
             price:productData.price,
+            unit:productData.unit,
             customerID:req.user.id,
             productID:req.params.id,
           });
           await Item.save();
           res.status(200).json(Item);
         }catch(err){next(err);}
+      }
        },
        async removeCart(req,res,next){
-        try{
-          await cartSchema.findByIdAndDelete(req.params.id);
-          res.status(200).json({ msg:" Removed Successfully "});
-        }catch(err){next(err);}
+        const productData=await productSchema.findById(req.params.id);
+        const productInCart=await cartSchema.findOne({productID:req.params.id,
+                                                      customerID:req.user.id });
+        
+        if(productInCart===null){
+          res.status(400).json({msg:"Product is not in cart"});
+        }else if(productInCart.cartQuantity===1){
+          
+          await cartSchema.findByIdAndDelete(productInCart._id);
+          res.status(200).json({msg:"removed from cart"});
+        }else{
+          const val=productInCart.cartQuantity-1;
+          const item=await cartSchema.findByIdAndUpdate(productInCart._id,{$set:{cartQuantity:val}});
+          res.status(200).json(item);
+        }
        },
        async showCart(req,res,next){
         try{
