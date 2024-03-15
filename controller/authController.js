@@ -39,10 +39,10 @@ const authController = {
     const newCustomer = new fishermanSchema({
       name: req.body.name,
       email: req.body.email,
-      // password: CryptoJs.AES.encrypt(
-        password:req.body.password,
-      //   CRYPTO_SECRET
-      // ).toString(),
+      password: CryptoJs.AES.encrypt(
+        req.body.password,
+        CRYPTO_SECRET
+      ).toString(),
       contact: req.body.contact,
       liscence: img,
     });

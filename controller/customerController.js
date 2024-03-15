@@ -73,7 +73,7 @@ const customerController={
             cartQuantity:1,
             price:productData.price,
             unit:productData.unit,
-            customerID:req.user.id,
+            customerID:req.user.id, 
             productID:req.params.id,
           });
           await Item.save();
