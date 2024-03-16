@@ -12,6 +12,7 @@ const fishermanController={
         }catch(err){next(err);}
     },
     async addProduct(req,res,next){
+            
             img=req.file.path;
             const newProduct=new productSchema({
                 fishermanID: req.user.id,

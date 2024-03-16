@@ -32,6 +32,7 @@ const verifyFisherman=(req,res,next)=>{
         }
     })
 }
+
 const verifyCustomer=(req,res,next)=>{
     verifyToken(req,res,() => {
         if(req.user.role==="customer"){
