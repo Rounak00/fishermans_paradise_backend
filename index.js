@@ -12,6 +12,7 @@ const logger = require("./utils/logger");
 const path=require("path");
 const app=express();
 
+app.use('/public', express.static('public'));
 global.appRoot = path.resolve(__dirname);
 
 app.use(

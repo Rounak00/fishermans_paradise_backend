@@ -4,6 +4,13 @@
 const productSchema=require("../model/ProductModel");
 
 const feature={
+    async product(req,res,next){
+        let ID=req.params.id;
+        try{ 
+           const item=await productSchema.findById(ID);
+           res.status(200).json(item);
+      }catch(err){next(err);}
+     },
       async allProduct(req,res,next){
         try{ 
            const item=await productSchema.find();
