@@ -11,6 +11,15 @@ const fishermanController={
           res.status(200).json(profile);
         }catch(err){next(err);}
     },
+    async getMyProducts(req,res,next){
+       try{ 
+        const id=req.user.id;
+        const items=await productSchema.find({fishermanID:id});
+        res.status(200).json(items);
+       }catch(err){
+         next(err);
+       }
+    },
     async addProduct(req,res,next){
             
             img=req.file.path;
