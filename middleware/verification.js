@@ -3,6 +3,7 @@ const JWT_SECRET=require("../config/secret").JWT_SECRET;
 
 const verifyToken=(req,res,next)=>{
     const acctoken=req.headers.authorization;
+    console.log(acctoken);
     if(!acctoken) return res.json({"msg":"user unauthorized"});
     else{
       const token=acctoken.split(" ")[1];
@@ -13,7 +14,6 @@ const verifyToken=(req,res,next)=>{
       })
     }
 }
-
 const verifyAdmin=(req,res,next)=>{
     verifyToken(req,res,() => {
         if(req.user.role==="admin"){
@@ -32,6 +32,7 @@ const verifyFisherman=(req,res,next)=>{
         }
     })
 }
+
 const verifyCustomer=(req,res,next)=>{
     verifyToken(req,res,() => {
         if(req.user.role==="customer"){

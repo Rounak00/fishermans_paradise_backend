@@ -21,14 +21,14 @@ const adminController={
     },
     async approvedFishermanList(req,res,next){
         try{ 
-        const list=await fishermanSchema.findOne({approve:true});
+        const list=await fishermanSchema.find({approve:true});
         res.status(200).json(list);
         }
         catch(err){next(err);}
     },
     async notApprovedFishermanList(req,res,next){
         try{ 
-        const list=await fishermanSchema.findOne({approve:false});
+        const list=await fishermanSchema.find({approve:false});
         res.status(200).json(list);
         }
         catch(err){next(err);}
