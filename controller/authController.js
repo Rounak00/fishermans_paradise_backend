@@ -96,7 +96,7 @@ const authController = {
       const originalPassword = hashPassword.toString(CryptoJs.enc.Utf8);
 
       originalPassword !== password &&
-        res.statsus(401).json({ msg: "Wrong password" });
+        res.status(401).json({ msg: "Wrong password" });
 
       const generateToken = jwt.sign(
         {
@@ -133,7 +133,7 @@ const authController = {
       const originalPassword = hashPassword.toString(CryptoJs.enc.Utf8);
 
       originalPassword !== password &&
-        res.statsus(401).json({ msg: "Wrong password" });
+        res.status(401).json({ msg: "Wrong password" });
       const generateToken = jwt.sign(
         {
           id: isExist._id,
@@ -167,7 +167,9 @@ const authController = {
       );
       const originalPassword = hashPassword.toString(CryptoJs.enc.Utf8);
 
-      originalPassword !== password && res.statsus(401).json("Wrong password");
+      if (originalPassword !== password) {
+        return res.status(401).json("Wrong password");
+      }
 
       const generateToken = jwt.sign(
         {
