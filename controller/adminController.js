@@ -3,6 +3,8 @@
 
 const adminSchema=require("../model/AdminModel");
 const fishermanSchema=require("../model/FishermanModel");
+const productSchema=require("../model/ProductModel");
+const customerSchema=require("../model/CustomerModel");
 
 
 
@@ -45,6 +47,15 @@ const adminController={
         let id=req.params.id;
         const profile=await fishermanSchema.findByIdAndUpdate(id,{ $set: { approve: false }});
         res.status(200).json(profile);
+        }catch(err){next(err);}
+    },
+    async adminDashboard(req,res,next){
+        try{
+          let user=await customerSchema.find().countDocuments();
+          let fisherman=await fishermanSchema.find().countDocuments();
+          let nafisherman=await fishermanSchema.find({approve:false}).countDocuments();
+          let afisherman=await fishermanSchema.find({approve:true}).countDocuments();
+          res.status(200).json({user,fisherman,nafisherman,afisherman});
         }catch(err){next(err);}
     }
     
