@@ -1,6 +1,6 @@
 <h1>API's that are tested in Postman : -</h3> 
 
- <h5>HealthCheck :</h5><sapn>localhost:5000/api/health/</sapn>
+ <h4>HealthCheck :</h4><sapn>localhost:5000/api/health/</sapn>
   
   Authentication:
         1. Customer_Register => localhost:5000/api/auth/customer/register
